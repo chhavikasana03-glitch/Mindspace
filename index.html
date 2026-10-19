@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MindSpace — A safe place to be you</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px 12px;background:#f0eef9;color:#292747;font-family:Arial,sans-serif}
+.app{max-width:760px;min-height:650px;margin:auto;background:#faf9ff;border:1px solid #e4e0f3;border-radius:24px;overflow:hidden}
+header{display:flex;align-items:center;gap:12px;padding:20px 24px;background:white;border-bottom:1px solid #ebe8f6}
+.logo{display:grid;place-items:center;width:46px;height:46px;border-radius:16px;background:#e8e4ff;color:#6655d9;font-size:28px}
+h1{margin:0;font-size:21px}.subtitle{margin-top:4px;color:#89869f;font-size:12px}
+.anon{margin-left:auto;padding:8px 11px;border-radius:20px;background:#efedff;color:#5d51bc;font-size:11px}
+main{padding:30px 24px 20px}
+.eyebrow{color:#8b83c5;font-size:10px;font-weight:bold;letter-spacing:1.5px}
+h2{margin:12px 0 8px;font-size:32px;letter-spacing:-1px}
+.intro{color:#77758f;font-size:14px;line-height:1.8}
+.privacy{display:flex;gap:12px;margin:22px 0;padding:14px;border:1px solid #e5e0ff;border-radius:14px;background:#f0edff;color:#635c99;font-size:12px;line-height:1.7}
+.chat{display:flex;flex-direction:column;gap:14px;min-height:190px;max-height:360px;overflow:auto;padding:5px 0 18px}
+.message{max-width:88%;padding:14px 16px;border-radius:18px;font-size:14px;line-height:1.8;overflow-wrap:anywhere;white-space:pre-wrap}
+.bot{align-self:flex-start;background:white;border:1px solid #ebe8f5;border-bottom-left-radius:5px}
+.user{align-self:flex-end;background:#e6e0ff;border-bottom-right-radius:5px}
+.prompt{margin:8px 0 12px;color:#8b83c5;font-size:10px;font-weight:bold;letter-spacing:1px}
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+button{cursor:pointer;font:inherit}
+.suggestion{padding:9px 12px;border:1px solid #e2ddf5;border-radius:22px;background:white;color:#6257a6;font-size:12px}
+.suggestion:hover{background:#efecff}
+form{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid #ddd8f0;border-radius:17px;background:white}
+input{width:100%;min-width:0;padding:12px 8px;outline:none;border:none;background:transparent;font-size:14px}
+.send{width:44px;height:44px;flex-shrink:0;border:0;border-radius:13px;background:#6958df;color:white;font-size:20px}
+footer{margin-top:15px;color:#a09bb4;text-align:center;font-size:11px}
+@media(max-width:480px){body{padding:0}.app{min-height:100vh;border-radius:0}main{padding:24px 17px}header{padding:17px}.anon{font-size:10px}.message{max-width:95%}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="logo">✿</div>
+<div><h1>MindSpace</h1><div class="subtitle">A safe place to be you.</div></div>
+<span class="anon">● Anonymous</span>
+</header>
+<main>
+<div class="eyebrow">YOUR PERSONAL SPACE</div>
+<h2>Hi there, friend.</h2>
+<p class="intro">You don't have to have everything figured out. Get comfortable and tell me what's on your mind.</p>
+<div class="privacy">🔒 <div><b>Demo mode</b><br>Replies are examples, not a real AI service. Messages are not saved to a server by this demo.</div></div>
+<div class="chat" id="chat" aria-live="polite">
+<div class="message bot">Hey, I'm glad you're here. 🌿<br><br>You can talk about a difficult day, something exciting, or something you can't quite put into words. You don't have to explain everything perfectly.<br><br>What's been on your mind lately?</div>
+</div>
+<p class="prompt">NOT SURE WHERE TO START?</p>
+<div class="suggestions">
+<button class="suggestion">I've had a tough day</button>
+<button class="suggestion">I feel anxious</button>
+<button class="suggestion">I need motivation</button>
+<button class="suggestion">I just want to talk</button>
+</div>
+<form id="form">
+<input id="input" maxlength="1500" placeholder="Type what's on your mind..." autocomplete="off" aria-label="Your message">
+<button class="send" aria-label="Send message">➤</button>
+</form>
+<footer>You deserve kindness, including from yourself.</footer>
+</main>
+</div>
+<script>
+const chat=document.getElementById('chat');
+const input=document.getElementById('input');
+const form=document.getElementById('form');
+let count=0;
+function add(text,who){
+ const el=document.createElement('div');
+ el.className='message '+who;
+ el.textContent=text;
+ chat.appendChild(el);
+ chat.scrollTop=chat.scrollHeight;
+}
+function reply(text){
+ const t=text.toLowerCase();
+ if(/anxious|anxiety|panic|worried|stress/.test(t))return "That sounds like a lot to carry. We don't have to solve everything at once. What has been worrying you the most?";
+ if(/sad|lonely|alone|cry|upset/.test(t))return "I'm glad you shared that. You don't have to pretend everything is okay. Has something happened recently, or has this feeling been building for a while?";
+ if(/tough day|bad day|rough day/.test(t))return "Some days take more out of us than others. You don't have to turn a difficult day into a lesson. Would you like to tell me what happened?";
+ if(/friend|relationship|family|breakup/.test(t))return "It sounds like this matters to you. I don't want to jump to conclusions. Would you like to tell me a little more about what happened?";
+ if(/motivation|procrastinat|can't focus/.test(t))return "You don't have to change everything today. One small step can be enough to begin. What's one thing you've been finding difficult to start?";
+ const replies=[
+ "I want to understand your situation rather than make assumptions. What part has been affecting you the most?",
+ "Thank you for putting that into words. You don't have to explain it perfectly. What feels most important for me to understand?",
+ "I'm listening. Would you prefer to talk through what happened or simply get things off your chest?",
+ "That sounds worth exploring a little more. How have you been feeling about it lately?"
+ ];
+ return replies[count++%replies.length];
+}
+form.addEventListener('submit',function(e){
+ e.preventDefault();
+ const text=input.value.trim();
+ if(!text)return;
+ add(text,'user');
+ input.value='';
+ document.querySelector('.suggestions').style.display='none';
+ const button=form.querySelector('button');
+ button.disabled=true;
+ setTimeout(function(){add(reply(text),'bot');button.disabled=false;input.focus()},400);
+});
+document.querySelectorAll('.suggestion').forEach(function(b){
+ b.addEventListener('click',function(){input.value=b.textContent;input.focus()});
+});
+</script>
+</body>
+</html>
